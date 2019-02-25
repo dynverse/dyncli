@@ -3,16 +3,16 @@
 main <- function() {
   args <- commandArgs(trailingOnly = TRUE)
   args <- c("ti", "--seed", "4", "--output", "/ti/output/")
-  args <- c("api")
+  args <- c("portash")
 
   case_when(
     length(args) == 0 ~ print_help(),
     args[[1]] == "ti" ~ main_ti(args[-1]),
-    args[[1]] == "tidirect" ~
+    args[[1]] == "portash" ~ main_portash(args[-1])
   )
 }
 
-main_api <- function(args) {
+main_portash <- function(args) {
   defaults_yaml <- list(
     "function" = list(
       "name" = "ti",
@@ -36,10 +36,11 @@ print_help <- function() {
 main_ti <- function(args, definition_location = "/code/definition.yml") {
   definition <- dynwrap::create_ti_method_definition(filename = definition_location, return_function = FALSE)
 
+  ##########################################
+  ##        CREATE OPTPARSE PARSER        ##
+  ##########################################
   parser <-
-    OptionParser(usage = paste0("docker run -v ~/ti_working_dir:/ti ", definition$container$docker)) %>%
-    add_option(c("-v", "--verbose"), action = "store_true", default = FALSE, help = "Print extra output") %>%
-    add_option(c("--seed"), type = "integer", default = NA, help = "A seed to be set") %>%
+    OptionParser(usage = "Rscript /code/run.R") %>%
     add_option(c("--expression"), type = "character", help = "Filename of expression data, example: /ti/input/expression.h5") %>%
     add_option(c("--counts"), type = "character", help = "Filename of raw counts data, example: /ti/input/counts.h5") %>%
     add_option(c("--output"), type = "character", help = "Filename of the output data, example: /ti/output/output.h5") %>%
@@ -47,16 +48,31 @@ main_ti <- function(args, definition_location = "/code/definition.yml") {
 
   parameters <- definition$parameters$parameters
 
-  # generate documentation per parameter separately
+  # add method-specific parameters
   for (parameter in parameters) {
     # is there no function in optparse to do this cleanly?
     parser@options[[length(parser@options) + 1]] <-
       dynparam::as_argparse(parameter)
   }
 
-  # generate documentation per input separately
-  # definition$input
-  # dynwrap::allowed_inputs
+  for (prior in tibble_as_list(dynwrap::priors)) {
+    if (prior$prior_id != "dataset") {
+      parser <- parser %>%
+        add_option(
+          opt_str = paste0("--", prior$prior_id),
+          help = paste0(prior$description, "\n", prior$example)
+        )
+    }
+  }
+
+  # add unimportant parameters
+  parser <- parser %>%
+    add_option(c("-v", "--verbose"), action = "store_true", default = FALSE, help = "Print extra output") %>%
+    add_option(c("--seed"), type = "integer", default = NA, help = "A seed to be set")
+
+  ##########################################
+  ##            PARSE ARGUMENTS           ##
+  ##########################################
 
   parsed_args <- parse_args(parser, args = args)
 
@@ -85,7 +101,7 @@ main_ti <- function(args, definition_location = "/code/definition.yml") {
 
   # write params to temporary file
   data <- lst(
-    expression_file =
+    dataset = dataset,
     params = param_values
   )
 
