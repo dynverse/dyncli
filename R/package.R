@@ -11,6 +11,7 @@
 #' @importFrom magrittr %<>% %$% set_rownames set_colnames
 #' @importFrom glue glue
 #' @importFrom yaml read_yaml
+#' @importFrom stringr str_replace str_replace_all
 #'
 #' @docType package
 #' @name dyncli

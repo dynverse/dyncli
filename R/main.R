@@ -1,13 +1,19 @@
 # definition_location <- "~/Workspace/dynverse/methods/ti_paga/definition.yml"
 # args <- c("--seed", "4", "--expression", "/ti/input/expression.csv", "--counts", "/ti/input/counts.csv", "--output", "/ti/output/output.h5", "--n_comps", "50")
 
-
+#' dyncli main function
+#'
+#' @param args The arguments to be read by dyncli
+#' @param definition_location The location of the definition file of the method
+#'
 #' @import optparse
 #' @importFrom dynwrap create_ti_method_definition
 #'
 #' @export
-main <- function(definition_location = "/code/definition.yml") {
-  args <- commandArgs(trailingOnly = TRUE)
+main <- function(
+  args = commandArgs(trailingOnly = TRUE),
+  definition_location = "/code/definition.yml"
+) {
 
   definition <- dynwrap::create_ti_method_definition(filename = definition_location, return_function = FALSE)
 
@@ -68,7 +74,7 @@ main <- function(definition_location = "/code/definition.yml") {
     } else {
       list()
     }
-  for (parameter in definition$parameters) {
+  for (parameter in definition$parameters$parameters) {
     task$params[[parameter$id]] <- dynparam::argparse_trafo(parameter, parsed_args[[parameter$id]])
   }
 
@@ -108,6 +114,9 @@ main <- function(definition_location = "/code/definition.yml") {
 }
 
 read_prior <- function(name, value) {
+  if (is.null(value)) {
+    return(NULL)
+  }
   if (name %in% c("start_n", "end_n", "groups_n")) {
     as.integer(value)
   } else if (name %in% c("start_id", "end_id", "features_id")) {
