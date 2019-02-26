@@ -23,14 +23,16 @@ BugReports: https://github.com/dynverse/dyncli/issues
 Description: CLI helper package for creating TI containers
 License: GPL-3
 LazyData: TRUE
-RoxygenNote: 6.1.0
+RoxygenNote: 6.1.1
 Roxygen: list(markdown = TRUE)
 Encoding: UTF-8
 Depends:
   R (>= 3.0.0)
 Imports:
   dplyr,
+  dynparam,
   dynutils,
+  dynwrap,
   glue,
   jsonlite,
   magrittr,
@@ -45,6 +47,7 @@ Imports:
 Suggests:
   hdf5r
 Remotes:
+  dynverse/dynparam,
   dynverse/dynutils,
-  dynverse/dyndimred
+  dynverse/dynwrap
 VignetteBuilder: knitr

@@ -5,10 +5,12 @@
 #' @import methods
 #' @import tibble
 #' @import dynutils
+#' @import dynparam
 #' @import readr
 #' @import purrr
 #' @importFrom magrittr %<>% %$% set_rownames set_colnames
 #' @importFrom glue glue
+#' @importFrom yaml read_yaml
 #'
 #' @docType package
 #' @name dyncli
