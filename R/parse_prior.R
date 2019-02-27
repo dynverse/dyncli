@@ -19,5 +19,7 @@ parse_prior <- function(value, name) {
       name = name,
       types = c("from" = "character", "to" = "character")
     )
+  } else {
+    stop("Unrecognised prior_id")
   }
 }
