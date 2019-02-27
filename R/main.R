@@ -8,6 +8,7 @@
 #'
 #' @import optparse
 #' @importFrom dynwrap create_ti_method_definition
+#' @importFrom yaml read_yaml
 #'
 #' @export
 main <- function(
@@ -33,6 +34,7 @@ main <- function(
     # priors
     add_option("--priors", type = "character", help = "A file containing prior information.\n\t\tFormat: See <....website....>.\n\t\tExample: $MOUNT/prior.(h5|yml).", default = NULL) %>%
 
+    # TODO: provide a more automated way of generating the priors using dynwrap::priors.
     add_option("--start_n", type = "character", help = "The number of start cells.\n\t\tFormat: integer.\n\t\tExample: 1.") %>%
     add_option("--end_n", type = "character", help = "The number of end cells.\n\t\tFormat: integer.\n\t\tExample: 4.") %>%
     add_option("--groups_n", type = "character", help = "The number of states, including the start, end and intermediary states.\n\t\tFormat: integer.\n\t\tExample: 5.") %>%
@@ -81,14 +83,20 @@ main <- function(
   # convert prior values to correct type
   task$priors <-
     if (!is.null(parsed_args$priors)) {
-      # TODO: fix groups_network
       # TODO: support hdf5
-      yaml::read_yaml(parsed_args$priors)
+      priors_file <- yaml::read_yaml(parsed_args$priors)
+
+      if ("groups_network" %in% names(priors_file)) {
+        assert_that(priors_file$groups_network %has_names% c("from", "to"))
+        priors_file$groups_network <- as_tibble(priors_file$groups_network)
+      }
+
+      priors_file
     } else {
       list()
     }
   for (prior_id in dynwrap::priors$prior_id %>% setdiff("dataset")) {
-    task$priors[[prior_id]] <- read_prior(prior_id, parsed_args[[prior_id]])
+    task$priors[[prior_id]] <- parse_prior(parsed_args[[prior_id]], prior_id)
   }
 
   if (!is.null(parsed_args$verbose)) {
@@ -111,35 +119,4 @@ main <- function(
   }
 
   task
-}
-
-read_prior <- function(name, value) {
-  if (is.null(value)) {
-    return(NULL)
-  }
-  if (name %in% c("start_n", "end_n", "groups_n")) {
-    as.integer(value)
-  } else if (name %in% c("start_id", "end_id", "features_id")) {
-    if (grepl("^[a-zA-Z0-9/_\\-\\.]*$", value) && file.exists(value)) {
-      read_tsv(value)[[1]]
-    } else {
-      value %>% strsplit(",") %>% first()
-    }
-  } else if (name %in% c("groups_id", "timecourse_discrete", "timecourse_continuous")) {
-    if (grepl("^[a-zA-Z0-9/_\\-\\.]*$", value) && file.exists(value)) {
-      x <- read_tsv(value) %>% deframe()
-    } else {
-      x <- value %>% str_replace_all(",", "\n") %>% str_replace_all("=", "\t") %>% read_tsv(col_names = c("a", "b")) %>% deframe()
-    }
-    if (name %in% c("timecourse_discrete", "timecourse_continuous")) {
-      x <- as.numeric(x)
-    }
-    x
-  } else if (name %in% c("groups_network")) {
-    if (grepl("^[a-zA-Z0-9/_\\-\\.]*$", value) && file.exists(value)) {
-      read_tsv(value)
-    } else {
-      value %>% str_replace_all(";", "\n") %>% str_replace_all(",", "\t") %>% read_tsv(col_names = c("from", "to"))
-    }
-  }
 }

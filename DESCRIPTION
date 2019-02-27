@@ -29,23 +29,25 @@ Encoding: UTF-8
 Depends:
   R (>= 3.0.0)
 Imports:
+  assertthat,
   dplyr,
   dynparam,
   dynutils,
   dynwrap,
+  fs,
   glue,
+  hdf5r,
   jsonlite,
   magrittr,
   methods,
   optparse,
   purrr,
   readr,
+  stringr,
   testthat,
   tibble,
   tidyr,
   yaml
-Suggests:
-  hdf5r
 Remotes:
   dynverse/dynparam,
   dynverse/dynutils,
