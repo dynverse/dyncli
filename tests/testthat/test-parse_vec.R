@@ -30,12 +30,12 @@ pwalk(
       if (!is.na(format)) {
         file <- tempfile(fileext = format)
 
-        write_vec(data, file, name)
+        write_vec(data, file = file, name = name)
       } else {
-        file <- write_vec(data, file = NA, name)
+        file <- write_vec(data, file = NA, name = name)
       }
 
-      v <- parse_vec(file, name, type)
+      v <- parse_vec(file, name = name, type = type)
 
       expect_equal(v, data)
     })

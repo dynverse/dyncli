@@ -6,21 +6,13 @@ parse_prior <- function(value, name) {
   if (name %in% c("start_n", "end_n", "groups_n")) {
     parse_vec(value, name, type = "integer")
   } else if (name %in% c("start_id", "end_id", "features_id")) {
-    if (fs::is_file(value)) {
-      read_tsv(value)[[1]]
-    } else {
-      value %>% strsplit(",") %>% first()
-    }
+    parse_vec(value, name, type = "character")
   } else if (name %in% c("groups_id", "timecourse_discrete", "timecourse_continuous")) {
-    if (fs::is_file(value)) {
-      x <- read_tsv(value) %>% deframe()
-    } else {
-      x <- value %>% str_replace_all(",", "\n") %>% str_replace_all("=", "\t") %>% read_tsv(col_names = c("a", "b")) %>% deframe()
-    }
-    if (name %in% c("timecourse_discrete", "timecourse_continuous")) {
-      x <- as.numeric(x)
-    }
-    x
+    parse_named_vec(
+      value,
+      names = c("cell_id", name),
+      type = c("groups_id" = "character", "timecourse_discrete" = "integer", "timecourse_continuous" = "numeric")[name]
+    )
   } else if (name %in% c("groups_network")) {
     if (fs::is_file(value)) {
       read_tsv(value)
