@@ -14,10 +14,10 @@ parse_prior <- function(value, name) {
       type = c("groups_id" = "character", "timecourse_discrete" = "integer", "timecourse_continuous" = "numeric")[name]
     )
   } else if (name %in% c("groups_network")) {
-    if (fs::is_file(value)) {
-      read_tsv(value)
-    } else {
-      value %>% str_replace_all(";", "\n") %>% str_replace_all(",", "\t") %>% read_tsv(col_names = c("from", "to"))
-    }
+    parse_data_frame(
+      value,
+      name = name,
+      types = c("from" = "character", "to" = "character")
+    )
   }
 }
