@@ -12,8 +12,7 @@ parse_vec <- function(x, name, type) {
     if (!fs::is_file(x)) {
       x %>% str_split(",") %>% first()
     } else if (grepl("\\.tsv$", x)) {
-      typ <- c("integer" = "i", "numeric" = "d", "logical" = "l", "character" = "c")[type]
-      col <- set_names(typ, name)
+      col <- set_names(readr_type_map[type], name)
       read_tsv(x, col_types = col)[[1]]
     } else if (grepl("\\.json$", x)) {
       read_json(x) %>% unlist()

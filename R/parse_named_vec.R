@@ -15,8 +15,7 @@ parse_named_vec <- function(x, names, type) {
       values <- vec %>% str_replace_all(".*=", "")
       set_names(values, names)
     } else if (grepl("\\.tsv$", x)) {
-      typ <- c("integer" = "i", "numeric" = "d", "logical" = "l", "character" = "c")[type]
-      col <- set_names(c("c", typ), names)
+      col <- set_names(c("c", readr_type_map[type]), names)
       read_tsv(x, col_types = col) %>% deframe()
     } else if (grepl("\\.json$", x)) {
       read_json(x) %>% unlist()
@@ -26,10 +25,7 @@ parse_named_vec <- function(x, names, type) {
       read_rds(x)
     } else if (grepl("\\.h5$", x)) {
       file_h5 <- H5File$new(x, mode = "r")
-      out <- set_names(
-        file_h5[[names[[2]]]][],
-        file_h5[[names[[1]]]][]
-      )
+      out <- file_h5[[names[[2]]]][] %>% deframe()
       file_h5$close_all()
       out
     }
@@ -68,8 +64,7 @@ write_named_vec <- function(x, file, names) {
     write_rds(x, file)
   } else if (grepl("\\.h5$", file)) {
     file_h5 <- hdf5r::H5File$new(file, mode = "w")
-    file_h5[[names[[1]]]] <- names(x)
-    file_h5[[names[[2]]]] <- x
+    file_h5[[names[[2]]]] <- x %>% enframe(name = names[[1]], value = names[[2]])
     file_h5$close_all()
   }
 }
