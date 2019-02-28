@@ -103,7 +103,7 @@ main <- function(
 }
 
 add_parameter_options <- function(parser, par_set) {
-  if (nrow(par_set$parameters) > 0) {
+  if (length(par_set$parameters) > 0) {
     parser <- parser %>% add_option("--params", type = "character", help = "A file containing method-specific parameters, example: $MOUNT/params.(h5|yml).", default = NULL)
   }
   for (parameter in par_set$parameters) {
