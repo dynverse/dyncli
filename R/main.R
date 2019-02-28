@@ -33,14 +33,15 @@ main <- function(
     add_prior_options(definition$inputs) %>%
 
     # add final parameters
-    add_option(c("-v", "--verbose"), action = "store_true", default = FALSE, help = "Print extra output.") %>%
-    add_option(c("--seed"), type = "integer", default = NA, help = "A seed to be set to ensure reproducability.")
+    add_option("--verbosity", type = "integer", default = 1, help = "The verbosity level. 0 => none, 1 => critical, 2 => info, 3 => debug") %>%
+    add_option("--seed", type = "integer", default = NA, help = "A seed to be set to ensure reproducability.")
 
   ##########################################
   ##            PARSE ARGUMENTS           ##
   ##########################################
 
   parsed_args <- parse_args(parser, args = args)
+  options(dyncli_verbosity = parsed_args$verbosity)
 
   # process dataset object (if passed)
   task <-
@@ -84,9 +85,10 @@ main <- function(
   }
 
   # process execution parameters (if passed)
-  if (!is.null(parsed_args$verbose)) {
+  if (parsed_args$verbosity) {
     task$verbose <- parsed_args$verbose
   }
+
   if (!is.null(parsed_args$seed)) {
     task$seed <- parsed_args$seed
   }
