@@ -6,7 +6,7 @@
 #' @param args The arguments to be read by dyncli
 #' @param definition_location The location of the definition file of the method
 #'
-#' @import optparse
+#' @importFrom optparse OptionParser add_option make_option parse_args
 #' @importFrom dynwrap create_ti_method_definition
 #' @importFrom yaml read_yaml
 #'
