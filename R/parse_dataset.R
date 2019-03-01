@@ -129,7 +129,7 @@ parse_dataset <- function(x, loom_expression_layer = NULL) {
   c(out, extra_input)
 }
 
-nornmalise <- function(counts) {
+normalise <- function(counts) {
   # TODO: provide better normalisation :(
   log2(counts + 1)
 }
