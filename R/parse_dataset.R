@@ -131,7 +131,9 @@ parse_dataset <- function(x, loom_expression_layer = NULL) {
 
 normalise <- function(counts) {
   # TODO: provide better normalisation :(
-  log2(counts + 1)
+  expr <- counts
+  expr@x <- log2(expr@x + 1)
+  expr
 }
 
 write_matrix <- function(x, file, format, name) {
