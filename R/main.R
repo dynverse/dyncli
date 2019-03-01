@@ -1,5 +1,5 @@
 # definition_location <- "~/Workspace/dynverse/methods/ti_paga/definition.yml"
-# args <- c("--seed", "4", "--expression", "/ti/input/expression.csv", "--counts", "/ti/input/counts.csv", "--output", "/ti/output/output.h5", "--n_comps", "50")
+# args <- c("--verbosity", "3", "--seed", "4", "--expression", "/ti/input/expression.csv", "--counts", "/ti/input/counts.csv", "--output", "/ti/output/output.h5", "--n_comps", "50")
 
 #' dyncli main function
 #'
@@ -15,11 +15,33 @@ main <- function(
   args = commandArgs(trailingOnly = TRUE),
   definition_location = "/code/definition.yml"
 ) {
+  # parse verbosity manually
+  verbosity <-
+    if (any(grepl("verbosity", args))) {
+      ix <- which(grepl("verbosity", args))
+
+      if (grepl("^--verbosity=[0-3]$", args[[ix]])) {
+        as.integer(gsub(".*=", "", args[[ix]]))
+      } else if (grepl("^[0-3]$", args[[ix + 1]])) {
+        as.integer(args[[ix+1]])
+      } else {
+        stop("flag \"verbosity\" requires an argument")
+      }
+    } else {
+      1 # default
+    }
+  set_verbosity(verbosity)
+
+  debug("Parsing definition at location ", definition_location, "\n")
   definition <- dynwrap::create_ti_method_definition(filename = definition_location, return_function = FALSE)
+
+  info("Found TI method ", definition$method$name, "\n")
 
   ##########################################
   ##        CREATE OPTPARSE PARSER        ##
   ##########################################
+  debug("Building argument parser\n")
+
   parser <-
     OptionParser(usage = paste0("LOCAL=/path/to/folder; MOUNT=/ti; docker run -v $LOCAL:$MOUNT ", definition$container$docker)) %>%
     add_option("--expression", type = "character", help = "Filename of (normalised) log-transformed expression data, example: $MOUNT/expression.(tsv|rds|h5|loom).") %>%
@@ -39,14 +61,15 @@ main <- function(
   ##########################################
   ##            PARSE ARGUMENTS           ##
   ##########################################
+  debug("Parsing arguments\n")
 
   parsed_args <- parse_args(parser, args = args)
-  options(dyncli_verbosity = parsed_args$verbosity)
+  debug("Arguments:\n", deparse(parsed_args))
 
   # process dataset object (if passed)
   task <-
     if (!is.null(parsed_args$dataset)) {
-      debug("Reading dataset file: ", parsed_args$dataset, "\n")
+      info("Reading dataset file: ", parsed_args$dataset, "\n")
       # TODO: support hdf5
       readr::read_rds(parsed_args$dataset)
     } else {
@@ -55,14 +78,13 @@ main <- function(
 
   # process expression / counts data (if passed)
   if (!is.null(parsed_args$expression)) {
-    debug("Reading expression file: ", parsed_args$expression, "\n")
+    info("Reading expression file: ", parsed_args$expression, "\n")
     task$expression <- parse_matrix(parsed_args$expression, name = "expression", type = "numeric")
   }
   if (!is.null(parsed_args$counts)) {
-    debug("Reading counts file: ", parsed_args$counts, "\n")
+    info("Reading counts file: ", parsed_args$counts, "\n")
     task$counts <- parse_matrix(parsed_args$counts, name = "counts", type = "integer")
   }
-
 
   # process parameters (if passed)
   task$params <-
@@ -82,7 +104,7 @@ main <- function(
   # process priors (if passed)
   task$priors <-
     if (!is.null(parsed_args$priors)) {
-      info("Reading priors file: ", parsed_args$priors, "\n")
+      debug("Reading priors file: ", parsed_args$priors, "\n")
       # TODO: support hdf5
       priors_file <- yaml::read_yaml(parsed_args$priors)
 
@@ -96,13 +118,14 @@ main <- function(
       list()
     }
   for (prior_id in dynwrap::priors$prior_id %>% setdiff("dataset")) {
-    info("Reading prior: ", prior_id, "\n")
+    debug("Reading prior: ", prior_id, "\n")
     task$priors[[prior_id]] <- parse_prior(parsed_args[[prior_id]], prior_id)
   }
 
   # process execution parameters
-  task$verbose <- parsed_args$verbosity >= 3
+  task$verbosity <- parsed_args$verbosity
   task$seed <- parsed_args$seed
 
+  info("Finished processing data\n")
   task
 }

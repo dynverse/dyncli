@@ -1,4 +1,6 @@
 add_prior_options <- function(parser, inputs) {
+  debug("Building method prior parsers\n")
+
   poss_priors <-
     tribble(
       ~input_id, ~description, ~format, ~example,
@@ -30,8 +32,10 @@ add_prior_options <- function(parser, inputs) {
   }
 
   for (i in seq_len(nrow(prior_info))) {
+    input_id <- prior_info$input_id[[i]]
+    debug("Building parser for prior ", input_id, "\n")
     parser <- parser %>% add_option(
-      opt_str = paste0("--", prior_info$input_id[[i]]),
+      opt_str = paste0("--", input_id),
       type = "character",
       help = paste0(
         "Prior", ifelse(prior_info$required[[i]], " (Required)", ""), ": ", prior_info$description[[i]], ".\n\t\t",
