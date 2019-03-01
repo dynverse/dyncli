@@ -44,9 +44,9 @@ main <- function(
 
   parser <-
     OptionParser(usage = paste0("LOCAL=/path/to/folder; MOUNT=/ti; docker run -v $LOCAL:$MOUNT ", definition$container$docker)) %>%
-    add_option("--expression", type = "character", help = "Filename of (normalised) log-transformed expression data, example: $MOUNT/expression.(tsv|rds|h5|loom).") %>%
-    add_option("--counts", type = "character", help = "Filename of raw counts data, example: $MOUNT/counts.(tsv|rds|h5|loom).") %>%
-    add_option("--output", type = "character", help = "Filename of the output trajectory data, example: $MOUNT/output.(h5|rds).") %>%
+    add_option("--dataset", type = "character", help = "Filename of the dataset, example: $MOUNT/dataset.(h5|loom). h5 files can be created by cellranger or dyncli.") %>%
+    add_option("--loom_expression_layer", type = "character", help = "If available, the name of the loom-layer containing normalised log-transformed data.") %>%
+    add_option("--output", type = "character", help = "Filename of the output trajectory data, example: $MOUNT/output.h5.") %>%
 
     # parameters
     add_parameter_options(definition$parameters) %>%
@@ -67,24 +67,11 @@ main <- function(
   debug("Arguments:\n", deparse(parsed_args))
 
   # process dataset object (if passed)
-  task <-
-    if (!is.null(parsed_args$dataset)) {
-      info("Reading dataset file: ", parsed_args$dataset, "\n")
-      # TODO: support hdf5
-      readr::read_rds(parsed_args$dataset)
-    } else {
-      list()
-    }
-
-  # process expression / counts data (if passed)
-  if (!is.null(parsed_args$expression)) {
-    info("Reading expression file: ", parsed_args$expression, "\n")
-    task$expression <- parse_matrix(parsed_args$expression, name = "expression", type = "numeric")
-  }
-  if (!is.null(parsed_args$counts)) {
-    info("Reading counts file: ", parsed_args$counts, "\n")
-    task$counts <- parse_matrix(parsed_args$counts, name = "counts", type = "integer")
-  }
+  info("Reading dataset file: ", parsed_args$dataset, "\n")
+  task <- parse_dataset(
+    parsed_args$dataset,
+    loom_expression_layer = parsed_args$loom_expression_layer
+  )
 
   # process parameters (if passed)
   task$params <-
