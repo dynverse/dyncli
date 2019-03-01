@@ -1,6 +1,6 @@
 #' @importFrom fs is_file
 #' @importFrom stringr str_replace_all str_split
-#' @importFrom readr read_tsv read_rds
+#' @importFrom readr read_tsv
 #' @importFrom jsonlite read_json
 #' @importFrom yaml read_yaml
 #' @importFrom hdf5r H5File
@@ -22,8 +22,6 @@ parse_data_frame <- function(x, name, types) {
     read_json(x, simplifyVector = TRUE) %>% as_tibble()
   } else if (grepl("\\.ya?ml$", x)) {
     read_yaml(x) %>% as_tibble()
-  } else if (grepl("\\.rds$", x)) {
-    read_rds(x)
   } else if (grepl("\\.h5$", x)) {
     file_h5 <- H5File$new(x, mode = "r")
     out <- file_h5[[name]][]
@@ -32,7 +30,7 @@ parse_data_frame <- function(x, name, types) {
   }
 }
 
-#' @importFrom readr write_tsv write_rds
+#' @importFrom readr write_tsv
 #' @importFrom jsonlite write_json
 #' @importFrom yaml write_yaml
 #' @importFrom hdf5r H5File
@@ -45,8 +43,6 @@ write_data_frame <- function(x, file, name) {
     write_json(as.list(x), file)
   } else if (grepl("\\.ya?ml$", file)) {
     write_yaml(as.list(x), file)
-  } else if (grepl("\\.rds$", file)) {
-    write_rds(x, file)
   } else if (grepl("\\.h5$", file)) {
     file_h5 <- hdf5r::H5File$new(file, mode = "w")
     file_h5[[name]] <- x

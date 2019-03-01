@@ -19,7 +19,6 @@ formats <- tribble(
   ".json",
   ".yaml",
   ".yml",
-  ".rds",
   ".h5"
 )
 

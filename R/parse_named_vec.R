@@ -1,6 +1,6 @@
 #' @importFrom fs is_file
 #' @importFrom stringr str_replace_all str_split
-#' @importFrom readr read_tsv read_rds
+#' @importFrom readr read_tsv
 #' @importFrom jsonlite read_json
 #' @importFrom yaml read_yaml
 #' @importFrom hdf5r H5File
@@ -21,8 +21,6 @@ parse_named_vec <- function(x, names, type) {
       read_json(x) %>% unlist()
     } else if (grepl("\\.ya?ml$", x)) {
       read_yaml(x) %>% unlist()
-    } else if (grepl("\\.rds$", x)) {
-      read_rds(x)
     } else if (grepl("\\.h5$", x)) {
       file_h5 <- H5File$new(x, mode = "r")
       out <- file_h5[[names[[2]]]][] %>% deframe()
@@ -43,7 +41,7 @@ parse_named_vec <- function(x, names, type) {
   }
 }
 
-#' @importFrom readr write_tsv write_rds
+#' @importFrom readr write_tsv
 #' @importFrom jsonlite write_json
 #' @importFrom yaml write_yaml
 #' @importFrom hdf5r H5File
@@ -60,8 +58,6 @@ write_named_vec <- function(x, file, names) {
     write_json(as.list(x), file)
   } else if (grepl("\\.ya?ml$", file)) {
     write_yaml(as.list(x), file)
-  } else if (grepl("\\.rds$", file)) {
-    write_rds(x, file)
   } else if (grepl("\\.h5$", file)) {
     file_h5 <- hdf5r::H5File$new(file, mode = "w")
     file_h5[[names[[2]]]] <- x %>% enframe(name = names[[1]], value = names[[2]])
