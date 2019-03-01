@@ -39,14 +39,14 @@ parse_dataset <- function(x, loom_expression_layer = NULL) {
         paste("Cell", seq_len(nrow(counts)))
       }
 
+    dimnames(counts) <- list(cell_ids, feature_ids)
+
     if (!is.null(loom_expression_layer)) {
       expression <- file_h5[[paste0("layers/", loom_expression_layer)]][,] %>% Matrix(sparse = TRUE)
+      dimnames(expression) <- list(cell_ids, feature_ids)
     }
 
     file_h5$close_all()
-
-    dimnames(counts) <- list(cell_ids, feature_ids)
-    dimnames(expression) <- list(cell_ids, feature_ids)
   } else if (grepl("\\.h5$", x)) {
     file_h5 <- H5File$new(x, mode = "r")
 
@@ -129,9 +129,9 @@ parse_dataset <- function(x, loom_expression_layer = NULL) {
   c(out, extra_input)
 }
 
-nornmalise <- function(x) {
+nornmalise <- function(counts) {
   # TODO: provide better normalisation :(
-  log2(x + 1)
+  log2(counts + 1)
 }
 
 write_matrix <- function(x, file, format, name) {
