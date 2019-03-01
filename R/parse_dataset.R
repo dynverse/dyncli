@@ -13,9 +13,9 @@ parse_dataset <- function(x, loom_expression_layer = NULL) {
   if (grepl("\\.loom$", x)) {
     file_h5 <- H5File$new(x, mode = "r")
 
-    assert_that(file_h5 %has_names% c("matrix", "row_attrs", "col_attrs"))
+    assert_that(file_h5 %has_names% c("matrix", "row_attrs", "col_attrs", "layers"))
 
-    counts <- file_h5[[path]][,] %>% Matrix(sparse = TRUE)
+    counts <- file_h5[["matrix"]][,] %>% Matrix(sparse = TRUE)
     feature_ids <- file_h5[["row_attrs/gene_names"]][]
     cell_ids <- file_h5[["col_attrs/cell_names"]][]
 
