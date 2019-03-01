@@ -64,7 +64,7 @@ main <- function(
   debug("Parsing arguments\n")
 
   parsed_args <- parse_args(parser, args = args)
-  debug("Arguments:\n", deparse(parsed_args))
+  debug("Arguments:\n", deparse(parsed_args), "\n")
 
   # process dataset object (if passed)
   info("Reading dataset file: ", parsed_args$dataset, "\n")

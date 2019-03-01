@@ -17,8 +17,8 @@ parse_dataset <- function(x, loom_expression_layer = NULL) {
 
     counts <- file_h5[["matrix"]][,] %>% Matrix(sparse = TRUE)
 
-    feature_paths <- paste0("row_attrs", c("gene_names", "Gene"))
-    cell_paths <- paste0("col_attrs", c("cell_names", "CellID"))
+    feature_paths <- paste0("row_attrs/", c("gene_names", "Gene"))
+    cell_paths <- paste0("col_attrs/", c("cell_names", "CellID"))
 
     feature_exists <- map_lgl(feature_paths, file_h5$exists) %>% which()
     cell_exists <- map_lgl(cell_paths, file_h5$exists) %>% which()
