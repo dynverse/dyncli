@@ -16,8 +16,28 @@ parse_dataset <- function(x, loom_expression_layer = NULL) {
     assert_that(file_h5 %has_names% c("matrix", "row_attrs", "col_attrs", "layers"))
 
     counts <- file_h5[["matrix"]][,] %>% Matrix(sparse = TRUE)
-    feature_ids <- file_h5[["row_attrs/gene_names"]][]
-    cell_ids <- file_h5[["col_attrs/cell_names"]][]
+
+    feature_paths <- paste0("row_attrs", c("gene_names", "Gene"))
+    cell_paths <- paste0("col_attrs", c("cell_names", "CellID"))
+
+    feature_exists <- map_lgl(feature_paths, file_h5$exists) %>% which()
+    cell_exists <- map_lgl(cell_paths, file_h5$exists) %>% which()
+
+    feature_ids <-
+      if (length(feature_exists) == 1) {
+        file_h5[[feature_paths[[feature_exists]]]][]
+      } else {
+        warning("feature IDs could not be found in the loom format!")
+        paste("Feature", seq_len(ncol(counts)))
+      }
+
+    cell_ids <-
+      if (length(cell_exists) == 1) {
+        file_h5[[cell_paths[[cell_exists]]]][]
+      } else {
+        warning("cell IDs could not be found in the loom format!")
+        paste("Cell", seq_len(nrow(counts)))
+      }
 
     if (!is.null(loom_expression_layer)) {
       expression <- file_h5[[paste0("layers/", loom_expression_layer)]][,] %>% Matrix(sparse = TRUE)
