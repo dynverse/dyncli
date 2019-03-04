@@ -114,6 +114,8 @@ main <- function(
   task$seed <- parsed_args$seed
   task$output <- parsed_args$output
 
+  if (!is.null(task$seed) && !is.na(task$seed)) set.seed(task$seed)
+
   info("Finished processing data\n")
   task
 }
