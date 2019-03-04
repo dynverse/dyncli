@@ -112,6 +112,7 @@ main <- function(
   # process execution parameters
   task$verbosity <- parsed_args$verbosity
   task$seed <- parsed_args$seed
+  task$output <- parsed_args$output
 
   info("Finished processing data\n")
   task
