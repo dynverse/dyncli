@@ -60,7 +60,7 @@ write_h5 <- function(x, file) {
 
     subsubfile <- subfile$create_group("data")
 
-    if (is.null(names(x))) names(x) <- paste0("elem", seq_along(x))
+    if (is.null(names(x)) && length(x) > 0) names(x) <- paste0("elem", seq_along(x))
 
     for (xn in names(x)) {
       .write_h5(x[[xn]], subsubfile, xn)
