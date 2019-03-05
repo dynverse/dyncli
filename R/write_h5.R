@@ -16,8 +16,7 @@ write_h5 <- function(x, file) {
     h5attr(subfile, "object_class") <- "null"
   } else if (any(grepl("^[dlniz]..Matrix$", class(x)))) {
     ipx <- as(x, "dgCMatrix")
-    file_h5$create_group(name)
-    subfile <- file_h5[[name]]
+    subfile <- file_h5$create_group(name)
     h5attr(subfile, "object_class") <- "sparse_matrix"
     subfile[["i"]] <- ipx@i
     subfile[["p"]] <- ipx@p
@@ -30,26 +29,22 @@ write_h5 <- function(x, file) {
       subfile[["colnames"]] <- colnames(ipx)
     }
   } else if (is.matrix(x)) {
-    file_h5$create_group(name)
-    subfile <- file_h5[[name]]
+    subfile <- file_h5$create_group(name)
     h5attr(subfile, "object_class") <- "dense_matrix"
     if (!is.null(rownames(x))) subfile[["rownames"]] <- rownames(x)
     if (!is.null(colnames(x))) subfile[["colnames"]] <- colnames(x)
     subfile[["data"]] <- x
   } else if (is.data.frame(x)) {
-    file_h5$create_group(name)
-    subfile <- file_h5[[name]]
+    subfile <- file_h5$create_group(name)
     h5attr(subfile, "object_class") <- "data_frame"
     subfile[["rownames"]] <- rownames(x)
     subfile[["colnames"]] <- colnames(x)
-    subfile$create_group("data")
-    subsubfile <- subfile[["data"]]
+    subsubfile <- subfile$create_group("data")
     for (xn in names(x)) {
       subsubfile[[xn]] <- x[[xn]]
     }
   } else if (is.atomic(x)) {
-    file_h5$create_group(name)
-    subfile <- file_h5[[name]]
+    subfile <- file_h5$create_group(name)
     h5attr(subfile, "object_class") <- "vector"
     if (!is.null(names(x))) subfile[["names"]] <- names(x)
     subfile[["data"]] <- x
@@ -57,15 +52,13 @@ write_h5 <- function(x, file) {
     if (name == "") {
       subfile <- file_h5
     } else {
-      file_h5$create_group(name)
-      subfile <- file_h5[[name]]
+      subfile <- file_h5$create_group(name)
     }
     h5attr(subfile, "object_class") <- "list"
     subfile[["class"]] <- class(x)
     if (!is.null(names(x))) subfile[["names"]] <- names(x)
 
-    subfile$create_group("data")
-    subsubfile <- subfile[["data"]]
+    subsubfile <- subfile$create_group("data")
 
     if (is.null(names(x))) names(x) <- paste0("elem", seq_along(x))
 
