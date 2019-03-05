@@ -9,7 +9,7 @@ write_h5 <- function(x, file) {
 
 #' @importFrom hdf5r h5attr<-
 .write_h5 <- function(x, file_h5, name) {
-  cat("Processing ", file_h5$get_obj_name(), "/", name, "\n", sep = "")
+  debug("Processing ", file_h5$get_obj_name(), ifelse(name != "", "/", ""), name, "\n", sep = "")
   if (is.null(x)) {
     file_h5[[name]] <- 0
     h5attr(file_h5[[name]], "object_class") <- "null"
