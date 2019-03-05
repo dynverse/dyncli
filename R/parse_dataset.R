@@ -62,7 +62,9 @@ parse_dataset <- function(x, loom_expression_layer = NULL) {
       ##########################
       ###       OWN H5       ###
       ##########################
-      .read_h5(file_h5)
+      tmp <- .read_h5(file_h5)
+      counts <- tmp$counts
+      expression <- tmp$expression
 
     } else if (file_h5 %has_names% "matrix" && file[["matrix"]] %has_names% c("barcodes", "data", "features", "indices", "indptr", "shape")) {
       ##########################
