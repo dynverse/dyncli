@@ -1,5 +1,6 @@
 #' @export
 read_h5 <- function(file) {
+  info("Reading object from ", file, "\n")
   file_h5 <- H5File$new(file, "r")
 
   lis <- .read_h5(file_h5)
