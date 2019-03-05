@@ -3,6 +3,7 @@
 export(main)
 export(read_h5)
 export(write_h5)
+export(write_output)
 import(assertthat)
 import(dplyr)
 import(dynparam)
