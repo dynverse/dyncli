@@ -12,6 +12,7 @@ parse_dataset <- function(x, loom_expression_layer = NULL) {
   ##########################
   if (grepl("\\.loom$", x)) {
     file_h5 <- H5File$new(x, mode = "r")
+    on.exit(file_h5$close_all())
 
     assert_that(file_h5 %has_names% c("matrix", "row_attrs", "col_attrs", "layers"))
 
@@ -53,10 +54,9 @@ parse_dataset <- function(x, loom_expression_layer = NULL) {
       expression <- file_h5[[paste0("layers/", loom_expression_layer)]][,] %>% Matrix(sparse = TRUE)
       dimnames(expression) <- list(cell_ids, feature_ids)
     }
-
-    file_h5$close_all()
   } else if (grepl("\\.h5$", x)) {
     file_h5 <- H5File$new(x, mode = "r")
+    on.exit(file_h5$close_all())
 
     if (file_h5 %has_names% c("data", "names") && "object_class" %in% h5attr_names(file_h5)) {
       ##########################
@@ -65,6 +65,17 @@ parse_dataset <- function(x, loom_expression_layer = NULL) {
       tmp <- .read_h5(file_h5)
       counts <- tmp$counts
       expression <- tmp$expression
+      extra_input <- list()
+
+      if ("params" %in% names(tmp)) {
+        extra_input$params <- tmp$params
+      }
+      if ("priors" %in% names(tmp)) {
+        extra_input$priors <- tmp$priors
+      }
+      if ("prior_information" %in% names(tmp)) {
+        extra_input$priors <- tmp$prior_information
+      }
 
     } else if (file_h5 %has_names% "matrix" && file[["matrix"]] %has_names% c("barcodes", "data", "features", "indices", "indptr", "shape")) {
       ##########################

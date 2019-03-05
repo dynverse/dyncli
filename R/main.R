@@ -73,9 +73,6 @@ main <- function(
     loom_expression_layer = parsed_args$loom_expression_layer
   )
 
-  # add method definition to task
-  task$definition <- definition
-
   # process parameters (if passed)
   task$params <-
     if (!is.null(parsed_args$params)) {
