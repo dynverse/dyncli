@@ -10,7 +10,11 @@ write_h5 <- function(x, file) {
 #' @importFrom hdf5r h5attr<-
 .write_h5 <- function(x, file_h5, name) {
   cat("Processing ", file_h5$get_obj_name(), "/", name, "\n", sep = "")
-  if (any(grepl("^[dlniz]..Matrix$", class(x)))) {
+  if (is.null(x)) {
+    subfile <- file_h5[[name]]
+    subfile <- "NULL"
+    h5attr(subfile, "object_class") <- "null"
+  } else if (any(grepl("^[dlniz]..Matrix$", class(x)))) {
     ipx <- as(x, "dgCMatrix")
     file_h5$create_group(name)
     subfile <- file_h5[[name]]

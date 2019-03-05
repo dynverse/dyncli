@@ -18,7 +18,9 @@ read_h5 <- function(file) {
   object_class <- h5attr(file_h5, "object_class")
 
   ## VECTOR ##
-  if (object_class == "vector") {
+  if (object_class == "null") {
+    NULL
+  } else if (object_class == "vector") {
     data_file <- file_h5[["data"]]
 
     # out <- data_file[]
