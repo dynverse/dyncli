@@ -52,7 +52,7 @@ main <- function(
     add_parameter_options(definition$parameters) %>%
 
     # priors
-    add_prior_options(definition$inputs) %>%
+    add_prior_options(definition$wrapper$inputs) %>%
 
     # add final parameters
     add_option("--verbosity", type = "integer", default = 1, help = "The verbosity level: 0 => none, 1 => critical (default), 2 => info, 3 => debug.") %>%
