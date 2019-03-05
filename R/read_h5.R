@@ -11,7 +11,7 @@ read_h5 <- function(file) {
 
 #' @importFrom hdf5r h5attr_names h5attr
 .read_h5 <- function(file_h5) {
-  debug("Reading ", file_h5$get_obj_name(), "\n", sep = "")
+  debug("Reading ", file_h5$get_obj_name(), "\n")
   if (!"object_class" %in% h5attr_names(file_h5)) {
     stop("Object class not found (path=", file_h5$get_filename(), ", obj_name=", file_h5$get_obj_name())
   }
