@@ -4,12 +4,14 @@
 \alias{write_output}
 \title{Write TI output data to a file}
 \usage{
-write_output(x, task)
+write_output(x, file, output_ids = NULL)
 }
 \arguments{
-\item{x}{A dynwrap object or a list to be passed to \code{dynwrap::wrap_output_list()}}
+\item{x}{A dynwrap object or a list to be passed to \code{dynwrap::wrap_output_list()}.}
 
-\item{task}{The task read by \code{main()}}
+\item{file}{Where to write the object to.}
+
+\item{output_ids}{If \code{x} is a list, this is a subset of \code{dynwrap::allowed_outputs}.}
 }
 \description{
 Write TI output data to a file
