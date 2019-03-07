@@ -62,7 +62,7 @@ parse_dataset <- function(x, loom_expression_layer = NULL) {
       ##########################
       ###       OWN H5       ###
       ##########################
-      tmp <- .read_h5(file_h5)
+      tmp <- dynutils::read_h5_(file_h5)
       counts <- tmp$counts
       expression <- tmp$expression
       extra_input <- list()

@@ -11,5 +11,5 @@ write_output <- function(x, file, output_ids = NULL) {
     x <- dynwrap::wrap_output_list(x, output_ids)
   }
 
-  write_h5(x, file)
+  dynutils::write_h5(x, file)
 }
