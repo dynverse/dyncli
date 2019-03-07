@@ -1,5 +1,5 @@
-# definition_location <- "~/Workspace/dynverse/methods/ti_paga/definition.yml"
-# args <- c("--verbosity", "3", "--seed", "4", "--expression", "/ti/input/expression.csv", "--counts", "/ti/input/counts.csv", "--output", "/ti/output/output.h5", "--n_comps", "50")
+# definition_location <- "../../methods/ti_paga/definition.yml"
+# args <- c("--verbosity", "3", "--seed", "4", "--dataset", "../../methods/ti_paga/example.h5", "--output", "/ti/output/output.h5", "--n_comps", "50")
 
 #' dyncli main function
 #'
@@ -89,25 +89,28 @@ main <- function(
   }
 
   # process priors (if passed)
-  task$priors <-
-    if (!is.null(parsed_args$priors)) {
-      debug("Reading priors file: ", parsed_args$priors, "\n")
-      # TODO: support hdf5
-      priors_file <- yaml::read_yaml(parsed_args$priors)
+  task$priors <- task$priors %||% list()
+  if (!is.null(parsed_args$priors)) {
+    debug("Reading priors file: ", parsed_args$priors, "\n")
+    # TODO: support hdf5
+    priors_file <- yaml::read_yaml(parsed_args$priors)
 
-      if ("groups_network" %in% names(priors_file)) {
-        assert_that(priors_file$groups_network %has_names% c("from", "to"))
-        priors_file$groups_network <- as_tibble(priors_file$groups_network)
-      }
-
-      priors_file
-    } else {
-      list()
+    if ("groups_network" %in% names(priors_file)) {
+      assert_that(priors_file$groups_network %has_names% c("from", "to"))
+      priors_file$groups_network <- as_tibble(priors_file$groups_network)
     }
-  for (prior_id in dynwrap::priors$prior_id %>% setdiff("dataset")) {
-    debug("Reading prior: ", prior_id, "\n")
-    task$priors[[prior_id]] <- parse_prior(parsed_args[[prior_id]], prior_id)
+
+    for (prior_id in dynwrap::priors$prior_id %>% setdiff("dataset")) {
+      debug("Reading prior: ", prior_id, "\n")
+      priors_file[[prior_id]] <- parse_prior(parsed_args[[prior_id]], prior_id)
+    }
+
+    # modify existing priors on top of those provided through cli
+    task$priors <- purrr::list_modify(task$priors,!!!priors_file)
   }
+
+  # TODO: Only give required priors or those that are requested (i.e. give_priors)
+
 
   # process execution parameters
   task$verbosity <- parsed_args$verbosity
