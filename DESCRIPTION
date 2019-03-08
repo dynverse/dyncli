@@ -50,6 +50,6 @@ Imports:
   yaml
 Remotes:
   dynverse/dynparam,
-  dynverse/dynutils@devel,
+  dynverse/dynutils,
   dynverse/dynwrap@singularity3
 VignetteBuilder: knitr
