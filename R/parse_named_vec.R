@@ -5,8 +5,13 @@
 #' @importFrom yaml read_yaml
 #' @importFrom hdf5r H5File
 parse_named_vec <- function(x, names, type) {
-  assert_that(length(names) == 2)
-  assert_that(type %all_in% c("integer", "numeric", "logical", "character"))
+  assert_that(
+    is.character(x),
+    length(x) == 1,
+    is.character(names),
+    length(names) == 2,
+    type %all_in% c("integer", "numeric", "logical", "character")
+  )
 
   v <-
     if (!fs::is_file(x)) {

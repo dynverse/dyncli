@@ -2,7 +2,12 @@
 #' @importFrom hdf5r H5File h5attr_names
 #' @importFrom Matrix sparseMatrix Matrix t
 parse_dataset <- function(x, loom_expression_layer = NULL) {
-  assert_that(fs::is_file(x))
+  assert_that(
+    is.character(x),
+    length(x) == 1,
+    fs::is_file(x),
+    msg = "--dataset should contain a pathname of a .loom or .h5 file. Add a '-h' flag for help."
+  )
 
   extra_input <- NULL
   expression <- NULL

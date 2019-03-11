@@ -5,8 +5,13 @@
 #' @importFrom yaml read_yaml
 #' @importFrom hdf5r H5File
 parse_data_frame <- function(x, name, types) {
-  assert_that(!is.null(names(types)))
-  assert_that(types %all_in% c("integer", "numeric", "logical", "character"))
+  assert_that(
+    is.character(x),
+    length(x) == 1,
+    is.character(names),
+    !is.null(names(types)),
+    types %all_in% c("integer", "numeric", "logical", "character")
+  )
 
   if (!fs::is_file(x)) {
     x2 <- x %>% str_replace_all(";", "\n") %>% str_replace_all(",", "\t")

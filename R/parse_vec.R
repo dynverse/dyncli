@@ -5,7 +5,13 @@
 #' @importFrom yaml read_yaml
 #' @importFrom hdf5r H5File
 parse_vec <- function(x, name, type) {
-  assert_that(length(name) == 1)
+  assert_that(
+    is.character(x),
+    length(x) == 1,
+    is.character(name),
+    length(name) == 1,
+    type %all_in% c("integer", "numeric", "logical", "character")
+  )
   assert_that(type %all_in% c("integer", "numeric", "logical", "character"))
 
   v <-

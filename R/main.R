@@ -90,6 +90,7 @@ main <- function(
 
   # process priors (if passed)
   task$priors <- task$priors %||% list()
+
   if (!is.null(parsed_args$priors)) {
     debug("Reading priors file: ", parsed_args$priors, "\n")
     # TODO: support hdf5
@@ -100,17 +101,18 @@ main <- function(
       priors_file$groups_network <- as_tibble(priors_file$groups_network)
     }
 
-    for (prior_id in dynwrap::priors$prior_id %>% setdiff("dataset")) {
+    task$priors <- purrr::list_modify(task$priors, !!!priors_file)
+  }
+
+  # process specific priors, if passed
+  for (prior_id in dynwrap::priors$prior_id %>% setdiff("dataset")) {
+    if (!is.null(parsed_args[[prior_id]])) {
       debug("Reading prior: ", prior_id, "\n")
       priors_file[[prior_id]] <- parse_prior(parsed_args[[prior_id]], prior_id)
     }
-
-    # modify existing priors on top of those provided through cli
-    task$priors <- purrr::list_modify(task$priors,!!!priors_file)
   }
 
   # TODO: Only give required priors or those that are requested (i.e. give_priors)
-
 
   # process execution parameters
   task$verbosity <- parsed_args$verbosity
