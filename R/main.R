@@ -56,7 +56,7 @@ main <- function(
 
     # add final parameters
     add_option("--verbosity", type = "integer", default = 1, help = "The verbosity level: 0 => none, 1 => critical (default), 2 => info, 3 => debug.") %>%
-    add_option("--seed", type = "integer", default = NA, help = "A seed to be set to ensure reproducability.")
+    add_option("--seed", type = "integer", help = "A seed to be set to ensure reproducability.")
 
   ##########################################
   ##            PARSE ARGUMENTS           ##
@@ -116,7 +116,7 @@ main <- function(
 
   # process execution parameters
   task$verbosity <- parsed_args$verbosity
-  task$seed <- parsed_args$seed
+  task$seed <- task$seed %||% parsed_args$seed %||% NA
   task$output <- parsed_args$output
 
   if (!is.null(task$seed) && !is.na(task$seed)) set.seed(task$seed)
