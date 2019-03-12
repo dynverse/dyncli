@@ -116,7 +116,7 @@ main <- function(
 
   # process execution parameters
   task$verbosity <- parsed_args$verbosity
-  task$seed <- parsed_args$seed %||% task$seed %||% NA
+  task$seed <- parsed_args$seed %||% task$seed %||% NA_integer_
   task$output <- parsed_args$output
 
   if (!is.null(task$seed) && !is.na(task$seed)) set.seed(task$seed)
