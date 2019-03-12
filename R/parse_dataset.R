@@ -82,6 +82,11 @@ parse_dataset <- function(x, loom_expression_layer = NULL) {
         extra_input$priors <- tmp$prior_information
       }
 
+      # add dataset prior if given
+      if (any(c("milestone_percentages", "divergence_regions", "milestone_network", "progressions") %in% names(tmp))) {
+        extra_input$priors$dataset <- tmp[c("milestone_network", "progressions", "milestone_percentages", "divergence_regions")]
+      }
+
     } else if (file_h5 %has_names% "matrix" && file[["matrix"]] %has_names% c("barcodes", "data", "features", "indices", "indptr", "shape")) {
       ##########################
       ###    CELLRANGER V3   ###
