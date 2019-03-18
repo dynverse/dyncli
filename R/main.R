@@ -33,7 +33,7 @@ main <- function(
   set_verbosity(verbosity)
 
   debug("Parsing definition at location ", definition_location, "\n")
-  definition <- dynwrap::create_ti_method_definition(filename = definition_location, return_function = FALSE)
+  definition <- dynwrap::create_ti_method_definition(filename = definition_location, script = NULL, return_function = FALSE)
 
   info("Found TI method ", definition$method$name, "\n")
 
