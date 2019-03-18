@@ -22,7 +22,7 @@ as_argparse.parameter <- function(x) {
     opt_str = paste0("--", x$id),
     type = "character",
     default = paste0(x$default, collapse = ","),
-    help = get_description(x, sep = "\n\t\t")
+    help = paste0("Parameter: ", get_description(x, sep = "\n\t\t"))
   )
 }
 
