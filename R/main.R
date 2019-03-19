@@ -74,18 +74,18 @@ main <- function(
   )
 
   # process parameters (if passed)
-  task$params <-
-    if (!is.null(parsed_args$params)) {
-      debug("Reading params file: ", parsed_args$params, "\n")
+  task$parameters <-
+    if (!is.null(parsed_args$parameters)) {
+      debug("Reading parameters file: ", parsed_args$parameters, "\n")
       # TODO: support hdf5
-      yaml::read_yaml(parsed_args$params)
+      yaml::read_yaml(parsed_args$parameters)
     } else {
       list()
     }
 
   for (parameter in definition$parameters$parameters) {
     debug("Reading parameter: ", parameter$id, "\n")
-    task$params[[parameter$id]] <- argparse_trafo(parameter, parsed_args[[parameter$id]])
+    task$parameters[[parameter$id]] <- argparse_trafo(parameter, parsed_args[[parameter$id]])
   }
 
   # process priors (if passed)

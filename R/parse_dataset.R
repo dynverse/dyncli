@@ -72,8 +72,8 @@ parse_dataset <- function(x, loom_expression_layer = NULL) {
       expression <- tmp$expression
       extra_input <- list()
 
-      if ("params" %in% names(tmp)) {
-        extra_input$params <- tmp$params
+      if ("parameters" %in% names(tmp)) {
+        extra_input$parameters <- tmp$parameters
       }
       if ("priors" %in% names(tmp)) {
         extra_input$priors <- tmp$priors
