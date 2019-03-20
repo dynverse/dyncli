@@ -81,6 +81,9 @@ parse_dataset <- function(x, loom_expression_layer = NULL) {
       if ("prior_information" %in% names(tmp)) {
         extra_input$priors <- tmp$prior_information
       }
+      if ("seed" %in% names(tmp)) {
+        extra_input$seed <- tmp$seed
+      }
 
       # add dataset prior if given
       if (any(c("milestone_percentages", "divergence_regions", "milestone_network", "progressions") %in% names(tmp))) {

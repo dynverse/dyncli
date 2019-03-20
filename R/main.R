@@ -69,7 +69,7 @@ main <- function(
   # process dataset object (if passed)
   info("Reading dataset file: ", parsed_args$dataset, "\n")
   task <- parse_dataset(
-    parsed_args$dataset,
+    x = parsed_args$dataset,
     loom_expression_layer = parsed_args$loom_expression_layer
   )
 
