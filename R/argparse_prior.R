@@ -28,12 +28,13 @@ add_prior_options <- function(parser, inputs) {
 
   if (nrow(prior_info) > 0) {
     parser <- parser %>%
-      add_option("--priors", type = "character", help = "A file containing prior information.\n\t\tFormat: See <....website....>.\n\t\tExample: $MOUNT/prior.(h5|yml).", default = NULL)
+      add_option("--priors", type = "character", help = "A file containing prior information.\n\t\tFormat: See <....website....>.\n\t\tExample: $MOUNT/prior.yml.", default = NULL) %>%
+      add_option("--use_priors", type = "character", help = "Which optional priors to use. Possible values are 'all', 'none' (default), or a comma separated vector or which priors to use.", default = "none")
   }
 
   for (i in seq_len(nrow(prior_info))) {
     input_id <- prior_info$input_id[[i]]
-    debug("Building parser for prior ", input_id, "\n")
+    # debug("Building parser for prior ", input_id, "\n")
     parser <- parser %>% add_option(
       opt_str = paste0("--", input_id),
       type = "character",
