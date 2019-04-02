@@ -13,8 +13,18 @@
 #' @export
 main <- function(
   args = commandArgs(trailingOnly = TRUE),
-  definition_location = "/code/definition.yml"
+  definition_location = NULL
 ) {
+  if (is.null(definition_location)) {
+    if(file.exists("./definition.yml")) {
+      definition_location <- "./definition.yml"
+    } else if (file.exists("/code") && file.exists("/code/definition.yml")) {
+      definition_location <- "/code/definition.yml"
+    } else {
+      stop("Definition needs to be defined")
+    }
+  }
+
   # parse verbosity manually
   verbosity <-
     if (any(grepl("verbosity", args))) {
