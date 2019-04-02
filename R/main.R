@@ -160,7 +160,7 @@ main <- function(
 
   # process specific priors, if passed
   priors_manual <- list()
-  for (prior_id in intersect(prior_names, names(parsed_args))) {
+  for (prior_id in intersect(dynwrap::priors$prior_id, names(parsed_args))) {
     debug("Reading prior: ", prior_id, "\n")
     priors_manual[[prior_id]] <- parse_prior(parsed_args[[prior_id]], prior_id)
   }
