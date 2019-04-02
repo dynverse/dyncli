@@ -15,6 +15,7 @@ main <- function(
   args = commandArgs(trailingOnly = TRUE),
   definition_location = NULL
 ) {
+  # load definition, or find it...
   if (is.null(definition_location)) {
     if(file.exists("./definition.yml")) {
       definition_location <- "./definition.yml"
@@ -68,7 +69,8 @@ main <- function(
 
     # add final parameters
     add_option("--verbosity", type = "integer", default = 1, help = "The verbosity level: 0 => none, 1 => critical (default), 2 => info, 3 => debug.") %>%
-    add_option("--seed", type = "integer", help = "A seed to be set to ensure reproducability.")
+    add_option("--seed", type = "integer", help = "A seed to be set to ensure reproducibility.") %>%
+    add_option("--debug", type = "logical", default = FALSE)
 
 
   debug("Parsing arguments\n")
@@ -131,6 +133,7 @@ main <- function(
     definition$wrapper$inputs %>%
     filter(type == "prior_information", !required) %>%
     pull(input_id)
+  prior_names <- c(required_priors, optional_priors)
 
   if (parsed_args$use_priors == "none") {
     optional_priors <- c()
@@ -160,7 +163,7 @@ main <- function(
 
   # process specific priors, if passed
   priors_manual <- list()
-  for (prior_id in intersect(dynwrap::priors$prior_id, names(parsed_args))) {
+  for (prior_id in intersect(prior_names, names(parsed_args))) {
     debug("Reading prior: ", prior_id, "\n")
     priors_manual[[prior_id]] <- parse_prior(parsed_args[[prior_id]], prior_id)
   }
@@ -183,6 +186,7 @@ main <- function(
   task$verbosity <- parsed_args$verbosity
   task$seed <- parsed_args$seed %||% task$seed %||% NA_integer_
   task$output <- parsed_args$output
+  task$debug <- parsed_args$debug
 
   debug("verbosity: ", task$verbosity, "\n")
   debug("seed: ", task$seed, "\n")
@@ -191,6 +195,11 @@ main <- function(
   if (!is.null(task$seed) && !is.na(task$seed)) set.seed(task$seed)
 
   info("Finished processing data\n")
+
+  if (isTRUE(task$debug)) {
+    browser()
+  }
+
   task
 }
 
