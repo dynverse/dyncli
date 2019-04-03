@@ -5,7 +5,7 @@
 \title{dyncli main function}
 \usage{
 main(args = commandArgs(trailingOnly = TRUE),
-  definition_location = "/code/definition.yml")
+  definition_location = NULL)
 }
 \arguments{
 \item{args}{The arguments to be read by dyncli}
