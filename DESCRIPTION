@@ -31,7 +31,7 @@ Depends:
 Imports:
   assertthat,
   dplyr,
-  dynparam,
+  dynparam,   
   dynutils (>= 1.0.2),
   dynwrap (>= 1.0.0),
   fs,
@@ -48,7 +48,7 @@ Imports:
   tibble,
   tidyr,
   yaml
-Remotes: 
+Remotes:  
     dynverse/dynparam@devel,
     dynverse/dynutils@devel
 VignetteBuilder: knitr
