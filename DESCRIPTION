@@ -51,5 +51,5 @@ Imports:
 Remotes:
   dynverse/dynparam,
   dynverse/dynutils,
-  dynverse/dynwrap@devel
+  dynverse/dynwrap
 VignetteBuilder: knitr
