@@ -50,7 +50,15 @@ dyncli::write_output(trajectory, dataset$output)
 
   readr::write_file(run_r_string, "run.R")
 
+  system("chmod +x run.R")
+
   method <- create_ti_method_definition("definition.yml", "run.R")
+
+  dataset <- dynwrap::example_dataset
+
+  trajectory <- dynwrap::infer_trajectory(dataset, method())
+
+  expect_true(dynwrap::is_wrapper_with_trajectory(trajectory))
 
   file.remove("definition.yml")
   file.remove("run.R")
