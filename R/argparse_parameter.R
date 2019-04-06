@@ -1,10 +1,10 @@
 add_parameter_options <- function(parser, par_set) {
   debug("Building method parameter parsers\n")
   if (length(par_set$parameters) > 0) {
-    parser <- parser %>% add_option("--parameters", type = "character", help = "A file containing method-specific parameters, example: $MOUNT/parameters.(h5|yml).", default = NULL)
+    parser <- parser %>% add_option("--parameters", type = "character", help = "A file containing method-specific parameters, example: $MOUNT/parameters.yml.", default = NULL)
   }
   for (parameter in par_set$parameters) {
-    debug("Building parser for parameter ", parameter$id, "\n")
+    # debug("Building parser for parameter ", parameter$id, "\n")
     parser@options[[length(parser@options) + 1]] <- as_argparse(parameter)
   }
   parser
@@ -21,7 +21,6 @@ as_argparse.parameter <- function(x) {
   optparse::make_option(
     opt_str = paste0("--", x$id),
     type = "character",
-    default = paste0(x$default, collapse = ","),
     help = paste0("Parameter: ", get_description(x, sep = "\n\t\t"))
   )
 }

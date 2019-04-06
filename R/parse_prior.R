@@ -1,6 +1,6 @@
 #' @importFrom stringr str_replace_all
 parse_prior <- function(value, name) {
-  if (is.null(value)) {
+  if (is.null(value) || identical(value, "null")) {
     return(NULL)
   }
   if (name %in% c("start_n", "end_n", "groups_n")) {

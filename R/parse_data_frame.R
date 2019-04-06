@@ -8,7 +8,7 @@ parse_data_frame <- function(x, name, types) {
   assert_that(
     is.character(x),
     length(x) == 1,
-    is.character(names),
+    is.character(name),
     !is.null(names(types)),
     types %all_in% c("integer", "numeric", "logical", "character")
   )

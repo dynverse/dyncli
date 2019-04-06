@@ -1,7 +1,7 @@
 Package: dyncli
 Type: Package
 Title: CLI helper package for creating TI containers
-Version: 0.0.1
+Version: 0.0.2
 Authors@R: c(
     person(
       "Robrecht", 
@@ -31,16 +31,18 @@ Depends:
 Imports:
   assertthat,
   dplyr,
-  dynparam,
-  dynutils (>= 1.0.1.9000),
-  dynwrap,
+  dynparam,   
+  dynutils (>= 1.0.2),
+  dynwrap (>= 1.0.0),
   fs,
   glue,
   hdf5r,
   jsonlite,
+  Matrix,
   magrittr,
   methods,
   optparse,
+  processx,
   purrr,
   readr,
   stringr,
@@ -53,3 +55,6 @@ Remotes:
   dynverse/dynutils,
   dynverse/dynwrap
 VignetteBuilder: knitr
+Suggests: 
+    knitr,
+    rmarkdown
