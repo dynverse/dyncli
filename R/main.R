@@ -46,7 +46,7 @@ main <- function(
   debug("Parsing definition at location ", definition_location, "\n")
   definition <- dynwrap::create_ti_method_definition(definition = definition_location, script = NULL, return_function = FALSE)
 
-  parameters_default <- definition$parameters$parameters %>% map("default")
+  parameters_default <- dynparam::get_defaults(definition$parameters)
 
   info("Found TI method ", definition$method$name, "\n")
 
