@@ -1,7 +1,7 @@
 Package: dyncli
 Type: Package
 Title: CLI helper package for creating TI containers
-Version: 0.0.1.9000
+Version: 0.0.2
 Authors@R: c(
     person(
       "Robrecht", 
@@ -50,9 +50,10 @@ Imports:
   tibble,
   tidyr,
   yaml
-Remotes:  
-    dynverse/dynparam@devel,
-    dynverse/dynutils@devel
+Remotes:
+  dynverse/dynparam,
+  dynverse/dynutils,
+  dynverse/dynwrap
 VignetteBuilder: knitr
 Suggests: 
     knitr,
