@@ -17,7 +17,7 @@ main <- function(
 ) {
   # load definition, or find it...
   if (is.null(definition_location)) {
-    if(file.exists("./definition.yml")) {
+    if (file.exists("./definition.yml")) {
       definition_location <- "./definition.yml"
     } else if (file.exists("/code") && file.exists("/code/definition.yml")) {
       definition_location <- "/code/definition.yml"
