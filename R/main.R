@@ -135,15 +135,19 @@ main <- function(
     pull(input_id)
   prior_names <- c(required_priors, optional_priors)
 
-  if (parsed_args$use_priors == "none") {
-    optional_priors <- c()
-  } else if (parsed_args$use_priors != "all") {
-    optional_prior_names <- parsed_args$use_priors %>% strsplit(",")
-    assert_that(
-      optional_prior_names %all_in% optional_priors,
-      "Priors passed to --use_priors must be a subset of the method's possible optional priors. Check -h for more information."
-    )
-    optional_priors <- intersect(optional_priors, optional_prior_names)
+  if (!is.null(parsed_args$use_priors)) {
+    if (parsed_args$use_priors == "none") {
+      optional_priors <- c()
+    } else if (parsed_args$use_priors == "all") {
+      # do nothing
+    } else {
+      optional_prior_names <- parsed_args$use_priors %>% strsplit(",")
+      assert_that(
+        optional_prior_names %all_in% optional_priors,
+        "Priors passed to --use_priors must be a subset of the method's possible optional priors. Check -h for more information."
+      )
+      optional_priors <- intersect(optional_priors, optional_prior_names)
+    }
   }
 
   priors_list <-
