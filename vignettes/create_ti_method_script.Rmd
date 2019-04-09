@@ -13,6 +13,7 @@ vignette: >
 
 ```{r setup}
 library(dynwrap)
+library(dyncli)
 ```
 
 An alternative to wrapping a script inside R, is to wrap it using an external script. Because this does not provide any dependency management, this is not really useful for method end-users, but rather as a way to easily develop a TI method and to ultimately step up towards [containerised wrapping](../create_ti_method_container).
@@ -142,7 +143,7 @@ method <- create_ti_method_definition(
   "run.R"
 )
 dataset <- dynwrap::example_dataset
-trajectory <- infer_trajectory(dataset, method(), verbose = TRUE)
+trajectory <- infer_trajectory(dataset, method(), verbose = TRUE, debug = TRUE)
 ```
 
 

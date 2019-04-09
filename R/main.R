@@ -6,9 +6,11 @@
 #' @param args The arguments to be read by dyncli
 #' @param definition_location The location of the definition file of the method
 #'
+#'
+#'
 #' @importFrom optparse OptionParser add_option make_option parse_args
-#' @importFrom dynwrap create_ti_method_definition
 #' @importFrom yaml read_yaml
+#' @importFrom dynwrap create_ti_method_definition
 #'
 #' @export
 main <- function(
@@ -70,13 +72,22 @@ main <- function(
     # add final parameters
     add_option("--verbosity", type = "integer", default = 1, help = "The verbosity level: 0 => none, 1 => critical (default), 2 => info, 3 => debug.") %>%
     add_option("--seed", type = "integer", help = "A seed to be set to ensure reproducibility.") %>%
-    add_option("--debug", type = "logical", default = FALSE)
+    add_option("--debug", action = "store_true")
 
 
   debug("Parsing arguments\n")
 
   parsed_args <- parse_args(parser, args = args)
   debug("Arguments:\n", paste(deparse(parsed_args), collapse = "\n"), "\n")
+
+  # if debug, return command to debug
+  if (isTRUE(parsed_args$debug)) {
+    args <- args[args != "--debug"]
+    args_debug <- paste0(deparse(args, width.cutoff = 500), collapse = "\n")
+    command <- paste0("task <- dyncli::main(", args_debug, ")", collapse = "")
+    cat("Use this command inside R to load the data: \n", crayon::bold(command), "\n")
+    quit(save = "no")
+  }
 
   ##########################################
   ##              PARSE TASK              ##
@@ -199,10 +210,6 @@ main <- function(
   if (!is.null(task$seed) && !is.na(task$seed)) set.seed(task$seed)
 
   info("Finished processing data\n")
-
-  if (isTRUE(task$debug)) {
-    browser()
-  }
 
   task
 }
