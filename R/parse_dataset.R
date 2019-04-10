@@ -144,11 +144,6 @@ normalise <- function(counts) {
   # TODO: provide better normalisation :(
   # TODO: Also print out warning that better normalisation should be added
 
-  # backwards compatibility with matrix datasets (e.g. those on zenodo)
-  if (is.matrix(expr)) {
-    expr <- as(expr, "dgCMatrix")
-  }
-
   expr <- counts
   expr@x <- log2(expr@x + 1)
   expr
