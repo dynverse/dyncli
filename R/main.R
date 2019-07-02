@@ -144,7 +144,7 @@ main <- function(
     definition$wrapper$inputs %>%
     filter(type == "prior_information", !required) %>%
     pull(input_id)
-  prior_names <- c(required_priors, optional_priors)
+  prior_names <- setdiff(c(required_priors, optional_priors), "dataset") #
 
   if (!is.null(parsed_args$use_priors)) {
     if (parsed_args$use_priors == "none") {
