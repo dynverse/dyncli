@@ -143,6 +143,7 @@ parse_dataset <- function(x, loom_expression_layer = NULL) {
 normalise <- function(counts) {
   # TODO: provide better normalisation :(
   # TODO: Also print out warning that better normalisation should be added
+
   expr <- counts
   expr@x <- log2(expr@x + 1)
   expr
