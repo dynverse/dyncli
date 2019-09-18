@@ -5,7 +5,7 @@ parse_dataset <- function(x, loom_expression_layer = NULL) {
   assert_that(
     is.character(x),
     length(x) == 1,
-    fs::is_file(x),
+    fs::is_file(x) || fs::is_link(x),
     msg = "--dataset should contain a pathname of a .loom or .h5 file. Add a '-h' flag for help."
   )
 
