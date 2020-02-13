@@ -21,7 +21,7 @@ Authors@R: c(
 URL: https://github.com/dynverse/dyncli
 BugReports: https://github.com/dynverse/dyncli/issues
 Description: CLI helper package for creating TI containers
-License: GPL-3
+License: MIT + LICENSE file
 LazyData: TRUE
 RoxygenNote: 6.1.1
 Roxygen: list(markdown = TRUE)
@@ -50,7 +50,7 @@ Imports:
   tibble,
   tidyr,
   yaml
-Remotes:  
+Remotes: 
     dynverse/dynparam@devel,
     dynverse/dynutils@devel,
     dynverse/dynwrap@devel
