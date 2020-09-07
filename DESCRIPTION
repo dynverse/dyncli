@@ -25,7 +25,7 @@ Imports:
     dplyr,
     dynparam,
     dynutils (>= 1.0.2),
-    dynwrap (>= 1.0.0),
+    dynwrap (>= 1.2.1),
     fs,
     hdf5r,
     jsonlite,
