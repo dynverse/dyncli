@@ -6,8 +6,6 @@
 #' @param args The arguments to be read by dyncli
 #' @param definition_location The location of the definition file of the method
 #'
-#'
-#'
 #' @importFrom optparse OptionParser add_option make_option parse_args
 #' @importFrom yaml read_yaml
 #' @importFrom dynwrap create_ti_method_definition
@@ -139,12 +137,12 @@ main <- function(
   # process priors (if passed)
   required_priors <-
     definition$wrapper$inputs %>%
-    filter(type == "prior_information", required) %>%
-    pull(input_id)
+    filter(.data[["type"]] == "prior_information", .data[["required"]]) %>%
+    pull("input_id")
   optional_priors <-
     definition$wrapper$inputs %>%
-    filter(type == "prior_information", !required) %>%
-    pull(input_id)
+    filter(.data[["type"]] == "prior_information", !.data[["required"]]) %>%
+    pull("input_id")
   prior_names <- setdiff(c(required_priors, optional_priors), "dataset")
 
   if (!is.null(parsed_args$use_priors)) {
