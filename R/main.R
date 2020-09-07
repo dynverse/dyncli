@@ -85,7 +85,8 @@ main <- function(
     args <- args[args != "--debug"]
     args_debug <- paste0(deparse(args, width.cutoff = 500), collapse = "\n")
     command <- paste0("task <- dyncli::main(", args_debug, ")", collapse = "")
-    cat("Use this command inside R to load the data: \n", crayon::bold(command), "\n")
+    # cat("Use this command inside R to load the data: \n", crayon::bold(command), "\n")
+    cat("Use this command inside R to load the data: \n\033[1m", command, "\033[22m\n")
     quit(save = "no")
   }
 
