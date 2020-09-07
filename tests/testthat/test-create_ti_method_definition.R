@@ -49,8 +49,7 @@ dyncli::write_output(trajectory, dataset$output)
 "
 
   readr::write_file(run_r_string, "run.R")
-
-  system("chmod +x run.R")
+  fs::file_chmod("run.R", "+x")
 
   method <- create_ti_method_definition("definition.yml", "run.R")
 
