@@ -71,7 +71,7 @@ run_r_string <- "#!/usr/bin/env Rscript
 dataset <- dyncli::main()
 
 library(dynwrap)
-library(dplyr)
+library(dplyr, warn.conflicts = FALSE)
 
 # infer trajectory
 pca <- prcomp(dataset$expression)
@@ -141,13 +141,16 @@ dataset <- dynwrap::example_dataset
 trajectory <- infer_trajectory(dataset, method(), verbose = TRUE)
 ```
 
+```{r, eval=FALSE, echo=FALSE}
+# g <- dynplot::plot_heatmap(trajectory, expression = dataset$expression)
+# ggplot2::ggsave(filename = "heatmap.png", g, width = 6, height = 4)
+```
 
 ```{r}
 # install dynplot to plot the output
-if (requireNamespace("dynplot", quietly = TRUE)) {
-  dynplot::plot_graph(trajectory)
-}
+# dynplot::plot_heatmap(trajectory, expression = dataset$expression)
 ```
+![](heatmap.png)
 
 ## Interactive development
 
