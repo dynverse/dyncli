@@ -144,7 +144,7 @@ trajectory <- infer_trajectory(dataset, method(), verbose = TRUE)
 
 ```{r}
 # install dynplot to plot the output
-if ("dynplot" %in% rownames(installed.packages())) {
+if (requireNamespace("dynplot", quietly = TRUE)) {
   dynplot::plot_graph(trajectory)
 }
 ```
