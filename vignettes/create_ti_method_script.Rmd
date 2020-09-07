@@ -16,9 +16,9 @@ library(dynwrap)
 library(dyncli)
 ```
 
-An alternative to wrapping a script inside R, is to wrap it using an external script. Because this does not provide any dependency management, this is not really useful for method end-users, but rather as a way to easily develop a TI method and to ultimately step up towards [containerised wrapping](../create_ti_method_container).
+dyncli helps creating a standalone Docker container for trajectory inference (TI) methods using dynwrap by auto-generating CLI and input/output file management based on the TI method's functionality.yml. In this vignette, we will go through the requirements for using dyncli. 
 
-Similarly as a wrapper written in R, you'll need to provide both a definition (= a _definition.yml_) and a way to run the methods (= a script).
+Other examples can be found at repositories such as [dynverse/ti_comp1](https://github.com/dynverse/ti_comp1), [dynverse/ti_paga](https://github.com/dynverse/ti_paga), [dynverse/ti_gng](https://github.com/dynverse/ti_gng).
 
 ## _definition.yml_
 

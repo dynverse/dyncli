@@ -2,15 +2,63 @@
 % Please edit documentation in R/main.R
 \name{main}
 \alias{main}
-\title{dyncli main function}
+\title{Main CLI function}
 \usage{
 main(args = commandArgs(trailingOnly = TRUE), definition_location = NULL)
 }
 \arguments{
 \item{args}{The arguments to be read by dyncli}
 
-\item{definition_location}{The location of the definition file of the method}
+\item{definition_location}{The location of the definition.yml file. If NULL, this function will check
+whether a definition.yml file exists in the current directory or in \verb{/code/}.}
 }
 \description{
-dyncli main function
+Given a definition.yml and R script, this function generates a CLI and
+processes the passed arguments.
+}
+\examples{
+\donttest{
+library(dynutils)
+library(dynwrap)
+
+# write example to file
+example_file <- tempfile(fileext = ".h5")
+output_file <- tempfile(fileext = ".h5")
+dynutils::write_h5(dynwrap::example_dataset, example_file)
+
+# write example definition to file
+definition.yml <- tempfile()
+definition_txt <- "method:
+  id: comp_1
+
+parameters:
+  - id: component
+    default: 1
+    type: integer
+    distribution:
+      type: uniform
+      lower: 1
+      upper: 10
+    description: The nth component to use
+
+wrapper:
+  input_required: expression
+  input_optional: start_id"
+writeLines(definition_txt, definition.yml)
+
+# simulate running cli
+# this is the same as running:
+# `> ./script.R --verbosity 3 --seed 4 --dataset example.h5 --output my_output.h5`
+task <- main(c(
+    "--verbosity", "3",
+    "--seed", "4",
+    "--dataset", example_file,
+    "--output", output_file
+  ), definition.yml)
+
+# do something with the input data
+task$expression
+task$parameters
+
+}
 }
