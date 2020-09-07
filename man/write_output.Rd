@@ -2,17 +2,39 @@
 % Please edit documentation in R/write_output.R
 \name{write_output}
 \alias{write_output}
-\title{Write TI output data to a file}
+\title{Write a dynwrap object to a file}
 \usage{
-write_output(x, file, output_ids = NULL)
+write_output(x, file)
 }
 \arguments{
-\item{x}{A dynwrap object or a list to be passed to \code{dynwrap::wrap_output_list()}.}
+\item{x}{A dynwrap object.}
 
 \item{file}{Where to write the object to.}
-
-\item{output_ids}{If \code{x} is a list, this is a subset of \code{dynwrap::allowed_outputs}.}
 }
 \description{
-Write TI output data to a file
+A data object created by chaining \code{wrap_data(...)}
+together with several \code{add_x(...)} function calls.
+}
+\examples{
+library(dynwrap)
+library(purrr)
+
+# generate some toy single-cell data
+cell_ids <- paste0("Cell", seq_len(10))
+
+# pseudotime from origin
+pseudotime <- runif(10)
+names(pseudotime) <- cell_ids
+
+# clustering
+grouping <- sample(letters[1:3], 10, replace = TRUE)
+names(grouping) <- cell_ids
+
+obj <- wrap_data(
+  cell_ids = cell_ids
+) \%>\% add_linear_trajectory(
+  pseudotime = pseudotime
+) \%>\% add_grouping(
+  grouping = grouping
+)
 }

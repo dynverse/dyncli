@@ -1,15 +1,37 @@
-#' Write TI output data to a file
+#' Write a dynwrap object to a file
 #'
-#' @param x A dynwrap object or a list to be passed to \code{dynwrap::wrap_output_list()}.
+#' A data object created by chaining `wrap_data(...)`
+#' together with several `add_x(...)` function calls.
+#'
+#' @param x A dynwrap object.
 #' @param file Where to write the object to.
-#' @param output_ids If \code{x} is a list, this is a subset of \code{dynwrap::allowed_outputs}.
 #'
 #' @export
-write_output <- function(x, file, output_ids = NULL) {
-  if (!dynwrap::is_data_wrapper(x)) {
-    assert_that(!is.null(output_ids))
-    x <- dynwrap::wrap_output_list(x, output_ids)
-  }
+#'
+#' @examples
+#' library(dynwrap)
+#' library(purrr)
+#'
+#' # generate some toy single-cell data
+#' cell_ids <- paste0("Cell", seq_len(10))
+#'
+#' # pseudotime from origin
+#' pseudotime <- runif(10)
+#' names(pseudotime) <- cell_ids
+#'
+#' # clustering
+#' grouping <- sample(letters[1:3], 10, replace = TRUE)
+#' names(grouping) <- cell_ids
+#'
+#' obj <- wrap_data(
+#'   cell_ids = cell_ids
+#' ) %>% add_linear_trajectory(
+#'   pseudotime = pseudotime
+#' ) %>% add_grouping(
+#'   grouping = grouping
+#' )
+write_output <- function(x, file) {
+  assert_that(dynwrap::is_data_wrapper(x))
 
   dynutils::write_h5(x, file)
 }
