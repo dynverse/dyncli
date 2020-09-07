@@ -3,4 +3,7 @@
 \docType{package}
 \name{dyncli}
 \alias{dyncli}
-\title{CLI helper package for creating TI containers}
+\title{\code{dyncli}: CLI Helper for Trajectory Inference Methods}
+\description{
+Helps with the input/output of trajectory inference methods created with \code{dynwrap}.
+}

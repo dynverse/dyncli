@@ -1,4 +1,6 @@
-#' CLI helper package for creating TI containers
+#' `dyncli`: CLI Helper for Trajectory Inference Methods
+#'
+#' Helps with the input/output of trajectory inference methods created with `dynwrap`.
 #'
 #' @import dplyr
 #' @import tidyr
