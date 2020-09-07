@@ -21,7 +21,15 @@ wrapper:
 
   readr::write_file(definition_string, "definition.yml")
 
-  run_r_string <- "#!/usr/bin/env Rscript
+  # can't use /usr/bin/env Rscript in R CMD check,
+  # even though it is recommended by the R manual
+  shebang <-
+    if (Sys.getenv("_R_CHECK_PACKAGE_NAME_") == "") {
+      "#!/usr/bin/env Rscript"
+    } else {
+      paste0("#!", Sys.getenv("R_HOME"), "/bin/Rscript")
+    }
+  run_r_string <- paste0(shebang, "
 
 dataset <- dyncli::main()
 
@@ -46,7 +54,7 @@ trajectory <- wrap_data(cell_ids = rownames(dataset$expression)) %>%
 
 # save output
 dyncli::write_output(trajectory, dataset$output)
-"
+")
 
   readr::write_file(run_r_string, "run.R")
   fs::file_chmod("run.R", "+x")
