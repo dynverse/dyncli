@@ -3,8 +3,4 @@
 \docType{package}
 \name{dyncli}
 \alias{dyncli}
-\alias{dyncli-package}
 \title{CLI helper package for creating TI containers}
-\description{
-CLI helper package for creating TI containers
-}
