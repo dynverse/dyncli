@@ -1,11 +1,11 @@
 Type: Package
 Package: dyncli
-Title: CLI Helper for Trajectory Inference Methods
+Title: Inferface Helper for Trajectory Inference Methods
 Version: 0.0.3.9000
 Authors@R: 
     c(person(given = "Robrecht",
              family = "Cannoodt",
-             role = c("aut", "cre"),
+             role = c("aut", "cre", "cph"),
              email = "rcannood@gmail.com",
              comment = c(ORCID = "0000-0003-3641-729X", github = "rcannood")),
       person(given = "Wouter",
@@ -14,7 +14,7 @@ Authors@R:
              email = "wouter.saelens@gmail.com",
              comment = c(ORCID = "0000-0002-7114-6248", github = "zouter")))
 Description: Helps with the input/output of trajectory inference
-    methods created with `dynwrap`.
+    methods created with 'dynwrap'.
 License: MIT + file LICENSE
 URL: https://github.com/dynverse/dyncli
 BugReports: https://github.com/dynverse/dyncli/issues
