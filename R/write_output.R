@@ -23,13 +23,21 @@
 #' grouping <- sample(letters[1:3], 10, replace = TRUE)
 #' names(grouping) <- cell_ids
 #'
-#' obj <- wrap_data(
+#' # create a dynwrap object
+#' traj <- wrap_data(
 #'   cell_ids = cell_ids
 #' ) %>% add_linear_trajectory(
 #'   pseudotime = pseudotime
 #' ) %>% add_grouping(
 #'   grouping = grouping
 #' )
+#'
+#' # write output to a temporary file
+#' tmp <- tempfile()
+#' write_output(traj, tmp)
+#'
+#' # clean up
+#' file.remove(tmp)
 write_output <- function(x, file) {
   assert_that(dynwrap::is_data_wrapper(x))
 
