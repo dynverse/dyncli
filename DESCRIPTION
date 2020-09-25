@@ -1,7 +1,7 @@
 Type: Package
 Package: dyncli
 Title: Inferface Helper for Trajectory Inference Methods
-Version: 0.0.3.9000
+Version: 0.1.0
 Authors@R: 
     c(person(given = "Robrecht",
              family = "Cannoodt",
@@ -25,7 +25,7 @@ Imports:
     dplyr,
     dynparam,
     dynutils (>= 1.0.2),
-    dynwrap (>= 1.2.1),
+    dynwrap (>= 1.2.2),
     fs,
     hdf5r,
     jsonlite,
